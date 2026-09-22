@@ -1,0 +1,12 @@
+# Maven
+target/
+
+# Java compilado
+*.class
+
+# IDE
+.idea/
+.vscode/
+
+# Variables de entorno
+.env
