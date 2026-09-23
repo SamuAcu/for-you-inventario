@@ -56,4 +56,54 @@ public class ProductoDAO {
 
         return productos;
     }
+
+            public Map<String, Object> crear(
+                String nombre,
+                String descripcion,
+                long categoriaId,
+                long unidadMedidaId
+        ) throws Exception {
+
+            String sql = """
+                    INSERT INTO productos (
+                        categoria_id,
+                        unidad_medida_id,
+                        nombre,
+                        descripcion
+                    )
+                    VALUES (?, ?, ?, ?)
+                    RETURNING id, nombre, descripcion, categoria_id, unidad_medida_id
+                    """;
+
+            try (
+                    Connection connection = DatabaseConnection.getConnection();
+                    PreparedStatement statement = connection.prepareStatement(sql)
+            ) {
+
+                statement.setLong(1, categoriaId);
+                statement.setLong(2, unidadMedidaId);
+                statement.setString(3, nombre);
+                statement.setString(4, descripcion);
+
+                try (ResultSet resultSet = statement.executeQuery()) {
+
+                    if (resultSet.next()) {
+
+                        Map<String, Object> producto = new HashMap<>();
+
+                        producto.put("id", resultSet.getLong("id"));
+                        producto.put("nombre", resultSet.getString("nombre"));
+                        producto.put("descripcion", resultSet.getString("descripcion"));
+                        producto.put("categoria_id", resultSet.getLong("categoria_id"));
+                        producto.put("unidad_medida_id", resultSet.getLong("unidad_medida_id"));
+
+                        return producto;
+                    }
+                }
+            }
+
+            throw new Exception("No se pudo crear el producto");
+        }
+
+
 }
