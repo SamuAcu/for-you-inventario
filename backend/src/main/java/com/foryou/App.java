@@ -1,5 +1,6 @@
 package com.foryou;
 
+import com.foryou.dao.VarianteDAO;
 import com.foryou.dao.ProductoDAO;
 import com.google.gson.Gson;
 
@@ -12,6 +13,7 @@ public class App {
         port(4567);
 
         ProductoDAO productoDAO = new ProductoDAO();
+        VarianteDAO varianteDAO = new VarianteDAO();
         Gson gson = new Gson();
 
         get("/", (request, response) -> {
@@ -23,6 +25,13 @@ public class App {
             response.type("application/json; charset=UTF-8");
 
             return gson.toJson(productoDAO.obtenerTodos());
+        });
+
+                get("/api/variantes", (request, response) -> {
+
+            response.type("application/json; charset=UTF-8");
+
+            return gson.toJson(varianteDAO.obtenerTodas());
         });
 
         awaitInitialization();
