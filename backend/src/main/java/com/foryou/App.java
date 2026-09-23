@@ -1,11 +1,12 @@
 package com.foryou;
 
 
-
+import com.foryou.dao.MovimientoDAO;
 import com.foryou.dao.EntradaDAO;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -30,6 +31,7 @@ public class App {
         UnidadMedidaDAO unidadMedidaDAO = new UnidadMedidaDAO();
         EntradaDAO entradaDAO = new EntradaDAO();
         ProductoDAO productoDAO = new ProductoDAO();
+        MovimientoDAO movimientoDAO = new MovimientoDAO();
         VarianteDAO varianteDAO = new VarianteDAO();
         CategoriaDAO categoriaDAO = new CategoriaDAO();
         Gson gson = new Gson();
@@ -322,6 +324,29 @@ public class App {
             response.type("application/json; charset=UTF-8");
 
             return gson.toJson(unidadMedidaDAO.obtenerTodas());
+        });
+
+                get("/api/movimientos", (request, response) -> {
+
+            response.type("application/json; charset=UTF-8");
+
+            try {
+
+                return gson.toJson(
+                        movimientoDAO.obtenerTodos()
+                );
+
+            } catch (Exception e) {
+
+                e.printStackTrace();
+
+                response.status(500);
+
+                return gson.toJson(Map.of(
+                        "error",
+                        "No se pudieron obtener los movimientos"
+                ));
+            }
         });
 
 
