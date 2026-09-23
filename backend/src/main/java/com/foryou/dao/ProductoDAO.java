@@ -18,13 +18,19 @@ public class ProductoDAO {
 
         String sql = """
                 SELECT
-                    id,
-                    nombre,
-                    descripcion,
-                    categoria_id,
-                    unidad_medida_id
-                FROM productos
-                ORDER BY id
+                    p.id,
+                    p.nombre,
+                    p.descripcion,
+                    c.nombre AS categoria,
+                    u.nombre AS unidad_medida,
+                    u.abreviatura
+                FROM productos p
+                INNER JOIN categorias c
+                    ON p.categoria_id = c.id
+                INNER JOIN unidades_medida u
+                    ON p.unidad_medida_id = u.id
+                WHERE p.activo = TRUE
+                ORDER BY p.id
                 """;
 
         try (
@@ -40,8 +46,9 @@ public class ProductoDAO {
                 producto.put("id", resultSet.getLong("id"));
                 producto.put("nombre", resultSet.getString("nombre"));
                 producto.put("descripcion", resultSet.getString("descripcion"));
-                producto.put("categoria_id", resultSet.getLong("categoria_id"));
-                producto.put("unidad_medida_id", resultSet.getLong("unidad_medida_id"));
+                producto.put("categoria", resultSet.getString("categoria"));
+                producto.put("unidad_medida", resultSet.getString("unidad_medida"));
+                producto.put("abreviatura", resultSet.getString("abreviatura"));
 
                 productos.add(producto);
             }

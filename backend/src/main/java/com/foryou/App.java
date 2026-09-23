@@ -20,7 +20,7 @@ public class App {
 
         get("/api/productos", (request, response) -> {
 
-            response.type("application/json");
+            response.type("application/json; charset=UTF-8");
 
             return gson.toJson(productoDAO.obtenerTodos());
         });
